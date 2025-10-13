@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Meme Mystery House</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+  body {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(135deg, #0b0c10, #1f2833);
+    color: #fff;
+    overflow: hidden;
+    transition: background 1s ease;
+  }
+
+  .center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+    text-align: center;
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 1s ease, transform 0.8s ease;
+  }
+
+  .center.active {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  button {
+    background: #00ffcc;
+    color: #000;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 0 10px #00ffcc;
+    transition: 0.3s;
+  }
+  button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 25px #00ffcc;
+  }
+
+  .hidden { display: none; }
+
+  .corner {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    opacity: 0;
+    cursor: pointer;
+  }
+  #topLeft { top: 0; left: 0; }
+  #bottomRight { bottom: 0; right: 0; }
+
+  input {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    text-align: center;
+    width: 200px;
+  }
+
+  .glow {
+    animation: glow 2s infinite alternate;
+  }
+
+  @keyframes glow {
+    from { text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc; }
+    to { text-shadow: 0 0 30px #00ffcc, 0 0 50px #00ffcc; }
+  }
+
+  /* Background animation for final room */
+  .final-bg {
+    background: linear-gradient(135deg, #0b0c10, #00ffcc);
+  }
+</style>
+</head>
+<body>
+
+<!-- ROOM 1 -->
+<div id="room1" class="center active">
+  <h1 class="glow">Welcome to the Meme Mystery House 🌀</h1>
+  <p>Only those with meme literacy may pass. Ready?</p>
+  <button onclick="goToRoom('room2')">Enter the House</button>
+</div>
+
+<!-- ROOM 2 -->
+<div id="room2" class="center hidden">
+  <h2>Room 1: The Hall of Left & Right 👁️</h2>
+  <p>"Look at the top left... now look at the bottom right."</p>
+  <p class="glow">Click both corners to reveal the next clue.</p>
+  <div id="topLeft" class="corner"></div>
+  <div id="bottomRight" class="corner"></div>
+</div>
+
+<!-- ROOM 3 -->
+<div id="room3" class="center hidden">
+  <h2>Room 2: The Chamber of L Bozo 💀</h2>
+  <p>"L + Ratio + You thought it was over?"</p>
+  <input type="text" id="answer" placeholder="Your comeback...">
+  <button onclick="checkAnswer()">Submit</button>
+  <p id="hint" style="color:red; display:none;">Try again, bozo 😭</p>
+</div>
+
+<!-- ROOM 4 -->
+<div id="room4" class="center hidden">
+  <h2>Room 3: The Gallery of Quotes 🎭</h2>
+  <p>“We were on a break!” <br> “Onii-chan~” <br> “I am inevitable.”</p>
+  <p class="glow">Find the secret code: combine the first letters of each quote (W, O, I)</p>
+  <input type="text" id="quoteAnswer" placeholder="Enter code">
+  <button onclick="checkQuote()">Unlock</button>
+  <p id="hint2" style="color:red; display:none;">That ain't it chief 😤</p>
+</div>
+
+<!-- FINAL ROOM -->
+<div id="final" class="center hidden">
+  <h2 class="glow">You did it, meme scholar. 🎉</h2>
+  <p>Welcome to the final level. Your reward awaits below:</p>
+  <button onclick="joinWhatsapp()">Claim Reward 🔗</button>
+  <p style="margin-top:20px;">Made by absolute degenerates for absolute degenerates 💀</p>
+</div>
+
+<!-- Confetti Library -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<script>
+  const rooms = ["room1","room2","room3","room4","final"];
+  let topClicked = false, bottomClicked = false;
+
+  function goToRoom(id) {
+    rooms.forEach(r => {
+      document.getElementById(r).classList.add("hidden");
+      document.getElementById(r).classList.remove("active");
+    });
+    const room = document.getElementById(id);
+    room.classList.remove("hidden");
+    setTimeout(() => room.classList.add("active"), 100);
+  }
+
+  document.getElementById("topLeft").addEventListener("click", ()=>{
+    topClicked = true;
+    checkCorners();
+  });
+
+  document.getElementById("bottomRight").addEventListener("click", ()=>{
+    bottomClicked = true;
+    checkCorners();
+  });
+
+  function checkCorners(){
+    if(topClicked && bottomClicked){
+      setTimeout(()=>goToRoom("room3"),800);
+    }
+  }
+
+  function checkAnswer(){
+    const ans = document.getElementById("answer").value.trim().toLowerCase();
+    if(ans.includes("cry about it")){
+      goToRoom("room4");
+    } else {
+      document.getElementById("hint").style.display="block";
+    }
+  }
+
+  function checkQuote(){
+    const code = document.getElementById("quoteAnswer").value.trim().toLowerCase();
+    if(code === "woi"){
+      goToRoom("final");
+      document.body.classList.add("final-bg");
+      celebrate();
+    } else {
+      document.getElementById("hint2").style.display="block";
+    }
+  }
+
+  function celebrate(){
+    const duration = 3 * 1000;
+    const end = Date.now() + duration;
+
+    (function frame() {
+      confetti({
+        particleCount: 4,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0 }
+      });
+      confetti({
+        particleCount: 4,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1 }
+      });
+      if (Date.now() < end) requestAnimationFrame(frame);
+    }());
+  }
+
+  function joinWhatsapp(){
+    window.location.href='https://chat.whatsapp.com/your-group-link-here';
+  }
+</script>
+
+</body>
+</html>
