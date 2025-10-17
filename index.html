@@ -165,7 +165,7 @@
 
 <!-- ROOM 1 -->
 <div id="room1" class="center active">
-  <h1 class="glow">Welcome to the Meme Mystery House 🌀</h1>
+  <h1 class="glow">Welcome to the Sarasva House 🌀</h1>
   <p>Only those with meme literacy may pass. Ready?</p>
   <button onclick="goToRoom('room2')">Enter the House</button>
 </div>
@@ -190,8 +190,15 @@
   <p style="margin-top:10px;">He says: <b>"Nah, I’d win."</b><br>Type your response:</p>
   <input type="text" id="gojoAns" placeholder="Type your comeback...">
   <button onclick="checkGojo()">Submit</button>
-  <p id="hintGojo" style="color:red; display:none;">Not the energy Gojo expected 😤</p>
+  <p id="hintGojo" style="color:orange; display:none;">Hint: The answer is right in front of your eyes 👁️</p>
+  <p id="wrongGojo" style="color:red; display:none;">Not the energy Gojo expected 😤</p>
+
+  <!-- Hidden console hint -->
+  <script>
+    console.log("For the uncultured ones, the answer is: 'nah i'd win' ");
+  </script>
 </div>
+
 
 <!-- Room 4: The Fight Club Rule -->
 <div id="room4" class="room hidden fight-room">
@@ -240,15 +247,24 @@
   });
 
   // ROOM 3 logic (Gojo meme)
-  function checkGojo() {
-    const ans = document.getElementById("gojoAns").value.trim().toLowerCase();
-    if (ans.includes("nah i'd win") || ans.includes("nah id win")) {
-      goToRoom("room4");
-      document.body.classList.remove("final-bg");
-    } else {
+let gojoTries = 0;
+
+function checkGojo() {
+  const ans = document.getElementById("gojoAns").value.trim().toLowerCase();
+
+  if (ans.includes("nah i'd win") || ans.includes("nah id win")) {
+    goToRoom("room4");
+    document.body.classList.remove("final-bg");
+  } else {
+    gojoTries++;
+    if (gojoTries === 1) {
       document.getElementById("hintGojo").style.display = "block";
+    } else {
+      document.getElementById("wrongGojo").style.display = "block";
     }
   }
+}
+
 
   // 🥊 ROOM 4: Fight Club
   const yesBtn = document.getElementById("yesBtn");
