@@ -286,14 +286,8 @@
           .toLowerCase();
 
         if (
-          ans.includes("nah i'd win") ||
-          ans.includes("nah id win") ||
-          ans.includes("Nah id win") ||
-          ans.includes("Nah, id win") ||
-          ans.includes("nah, id win") ||
-          ans.includes("nah, i'd win") ||
-          ans.includes("Nah i'd win") ||
-          ans.includes("Nah, i'd win")
+          ans.trim().toLowerCase().includes("nah i'd win") ||
+          ans.trim().toLowerCase().includes("nah, i'd win")
         ) {
           goToRoom("room4");
           document.body.classList.remove("final-bg");
