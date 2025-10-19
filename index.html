@@ -252,7 +252,7 @@ let gojoTries = 0;
 function checkGojo() {
   const ans = document.getElementById("gojoAns").value.trim().toLowerCase();
 
-  if (ans.includes("nah i'd win") || ans.includes("nah id win")) {
+  if (ans.includes("nah i'd win") || ans.includes("nah id win") || ans.inculdes("nah,id win") || ans.inculdes("nah,i'd win")) {
     goToRoom("room4");
     document.body.classList.remove("final-bg");
   } else {
