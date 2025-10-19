@@ -258,7 +258,7 @@ function checkGojo() {
   // nah\s*,? -> match 'nah' optionally followed by comma and spaces
   // i'?d\s+win -> match "id" or "i'd" with spaces before 'win'
   // \s*$     -> allow trailing spaces
-  const pattern = /^\s*nah\s*,?\s*i'?d\s+win\s*$/i;
+    const pattern = /^\s*nah\s*,?\s*i'?d\s+win[\s.!?]*$/i;
 
   if (pattern.test(ans)) {
     goToRoom("room4");
