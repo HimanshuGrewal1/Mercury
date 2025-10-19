@@ -252,16 +252,15 @@ let gojoTries = 0;
 function checkGojo() {
   const ans = document.getElementById("gojoAns").value.trim().toLowerCase();
 
-  if (
-    ans.includes("nah i'd win") ||
-    ans.includes("nah id win") ||
-    ans.includes("nah,id win") ||
-    ans.includes("nah,i'd win")||
-      ans.includes("nah,id win.") ||
-    ans.includes("nah,i'd win.")||
-     ans.includes("nahid win.") ||
-    ans.includes("nahi'd win.")
-  ) {
+  // Regex explanation:
+  // ^\s*nah\s*,?\s*i'?d\s+win\s*$ 
+  // ^\s*     -> allow leading spaces
+  // nah\s*,? -> match 'nah' optionally followed by comma and spaces
+  // i'?d\s+win -> match "id" or "i'd" with spaces before 'win'
+  // \s*$     -> allow trailing spaces
+  const pattern = /^\s*nah\s*,?\s*i'?d\s+win\s*$/i;
+
+  if (pattern.test(ans)) {
     goToRoom("room4");
     document.body.classList.remove("final-bg");
   } else {
@@ -273,6 +272,7 @@ function checkGojo() {
     }
   }
 }
+
 
 
   // 🥊 ROOM 4: Fight Club
