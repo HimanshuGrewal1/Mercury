@@ -58,7 +58,29 @@
     font-size: 12px;
   }
   #hintTopLeft { top: 10px; left: 10px; font-size: 14px; }
-  #hintBottomRight { bottom: 129px; right: 55px; font-size: 10px; }
+#hintBottomRight {
+  position: fixed;          
+  right: 2vw;              
+  bottom: 2vh;              
+  font-size: 0.5rem;
+  z-index: 1000;            
+}
+
+/* For phones with navigation bars */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  #hintBottomRight {
+    bottom: calc(env(safe-area-inset-bottom) + 1.5vh);
+  }
+}
+
+/* Extra tweaks for very small devices */
+@media (max-width: 600px) {
+  #hintBottomRight {
+    font-size: 0.7rem;
+    right: 3vw;
+  }
+}
+
 
   .emoji {
     font-size: 20px;
