@@ -58,7 +58,22 @@
     font-size: 12px;
   }
   #hintTopLeft { top: 10px; left: 10px; font-size: 14px; }
-  #hintBottomRight { bottom: 10px; right: 10px; font-size: 10px; }
+#hintBottomRight {
+  position: fixed;          
+  right: 2vw;              
+  bottom: 2vh;              
+  font-size: 0.5rem;
+  z-index: 1000;            
+}
+
+/* Small screens (phones) */
+@media (max-width: 600px) {
+  #hintBottomRight {
+    bottom: 11vh;
+    right: 4vw;
+    font-size: 0.7rem;
+  }
+}
 
   .emoji {
     font-size: 20px;
@@ -84,7 +99,6 @@
     to { text-shadow: 0 0 30px #00ffcc, 0 0 50px #00ffcc; }
   }
 
-  /* Final background */
   .final-bg {
     background: linear-gradient(135deg, #0b0c10, #00ffcc);
   }
@@ -159,30 +173,53 @@
   pointer-events: none;
 }
 
+/* Contact button */
+.contact-btn {
+  position: fixed;
+  top: 10px;
+  right: 15px;
+  background: #00ffcc;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 10px #00ffcc;
+  transition: 0.3s;
+  z-index: 9999;
+}
+.contact-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px #00ffcc;
+}
 </style>
 </head>
 <body>
 
+<!-- Contact Button (visible on all rooms) -->
+ <a href="contact.html">
+<button class="contact-btn" >Contact</button></a>
+
 <!-- ROOM 1 -->
 <div id="room1" class="center active">
-  <h1 class="glow">Welcome to the Meme Mystery House 🌀</h1>
+  <h1 class="glow">Welcome to the Sarasva House 🌀</h1>
   <p>Only those with meme literacy may pass. Ready?</p>
   <button onclick="goToRoom('room2')">Enter the House</button>
 </div>
 
-<!-- ROOM 2 (Look top left & bottom right) -->
+<!-- ROOM 2 -->
 <div id="room2" class="center hidden">
   <h2>The Hall of Left & Right 👁️</h2>
   <p>"look at top left."</p>
   <span id="hintTopLeft" class="hint-text">look at the bottom right</span>
   <span id="hintBottomRight" class="hint-text">click on the 👁️ emoji</span>
-
   <div style="position:absolute; bottom:50%; right:50%;">
     <span id="eyeEmoji" class="emoji">👁️</span>
   </div>
 </div>
 
-<!-- ROOM 3 (Gojo meme) -->
+<!-- ROOM 3 -->
 <div id="room3" class="center hidden">
   <h2>The Gojo Chamber 😎</h2>
   <p>"Strongest Jujutsu Sorcerer awaits your reply"</p>
@@ -193,30 +230,24 @@
   <p id="hintGojo" style="color:orange; display:none;">Hint: The answer is right in front of your eyes 👁️</p>
   <p id="wrongGojo" style="color:red; display:none;">Not the energy Gojo expected 😤</p>
 
-  <!-- Hidden console hint -->
   <script>
     console.log("For the uncultured ones, the answer is: 'nah i'd win' ");
   </script>
 </div>
 
-
-<!-- Room 4: The Fight Club Rule -->
+<!-- ROOM 4 -->
 <div id="room4" class="room hidden fight-room">
   <h2 class="fight-title">Final Room 🥊</h2>
-    <h3 class="fight-title">hint (fight club)</h3>
   <p class="fight-text">Are you here to enter <strong>Sarasva?</strong></p>
-
   <div class="fight-buttons">
     <button id="yesBtn">Yes</button>
     <button id="noBtn">No</button>
   </div>
-
   <p id="fightResult" class="fight-result"></p>
   <canvas id="confettiCanvas"></canvas>
 </div>
 
-
-<!-- ROOM 4 (Final room) -->
+<!-- FINAL ROOM -->
 <div id="final" class="center hidden">
   <h2 class="glow">You did it, meme scholar. 🎉</h2>
   <p>Welcome to the final level. Your reward awaits below:</p>
@@ -224,11 +255,18 @@
   <p style="margin-top:20px;">Made by absolute degenerates for absolute degenerates 💀</p>
 </div>
 
-<!-- Confetti Library -->
+<!-- CONTACT PAGE -->
+<div id="contact" class="center hidden">
+  <h2 class="glow">Contact Us 📧</h2>
+  <p>For any query or anything else, contact this email:</p>
+  <p style="font-weight:bold; color:#00ffcc;">example@email.com</p>
+  <button onclick="goToRoom('room1')">Back to Start</button>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <script>
-  const rooms = ["room1", "room2", "room3", "room4", "final"];
+  const rooms = ["room1", "room2", "room3", "room4", "final", "contact"];
 
   function goToRoom(id) {
     rooms.forEach(r => {
@@ -241,18 +279,15 @@
     setTimeout(() => room.classList.add("active"), 100);
   }
 
-  // ROOM 2 logic
   document.getElementById("eyeEmoji").addEventListener("click", () => {
     goToRoom("room3");
   });
 
-  // ROOM 3 logic (Gojo meme)
 let gojoTries = 0;
-
 function checkGojo() {
   const ans = document.getElementById("gojoAns").value.trim().toLowerCase();
-
-  if (ans.includes("nah i'd win") || ans.includes("nah id win")) {
+  const pattern = /^\s*nah\s*,?\s*i'?d\s+win[\s.!?]*$/i;
+  if (pattern.test(ans)) {
     goToRoom("room4");
     document.body.classList.remove("final-bg");
   } else {
@@ -265,78 +300,38 @@ function checkGojo() {
   }
 }
 
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const fightResult = document.getElementById("fightResult");
 
-  // 🥊 ROOM 4: Fight Club
-  const yesBtn = document.getElementById("yesBtn");
-  const noBtn = document.getElementById("noBtn");
-  const fightResult = document.getElementById("fightResult");
+yesBtn.addEventListener("click", () => {
+  alert("There’s only one rule about the Fight Club...\nNo one talks about the Fight Club.");
+  document.body.style.transition = "opacity 1.5s";
+  document.body.style.opacity = "0";
+  setTimeout(() => {
+    window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+  }, 1500);
+});
 
-  yesBtn.addEventListener("click", () => {
-    alert("There’s only one rule about the Fight Club...\nNo one talks about the Fight Club.");
-    document.body.style.transition = "opacity 1.5s";
-    document.body.style.opacity = "0";
-    setTimeout(() => {
-      window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"; // Rickroll 😈
-    }, 1500);
-  });
+noBtn.addEventListener("click", () => {
+  fightResult.textContent = "Good choice. Proceed to the final link...";
+  fightResult.style.opacity = "1";
+  const duration = 3 * 1000;
+  const end = Date.now() + duration;
+  (function frame() {
+    confetti({ particleCount: 6, angle: 60, spread: 55, origin: { x: 0 } });
+    confetti({ particleCount: 6, angle: 120, spread: 55, origin: { x: 1 } });
+    if (Date.now() < end) requestAnimationFrame(frame);
+  })();
+  setTimeout(() => {
+    joinWhatsapp();
+    document.body.classList.add("final-bg");
+  }, 3000);
+});
 
-  noBtn.addEventListener("click", () => {
-    fightResult.textContent = "Good choice. Proceed to the final link...";
-    fightResult.style.opacity = "1";
-
-    // Confetti celebration
-    const duration = 3 * 1000;
-    const end = Date.now() + duration;
-
-    (function frame() {
-      confetti({
-        particleCount: 6,
-        angle: 60,
-        spread: 55,
-        origin: { x: 0 }
-      });
-      confetti({
-        particleCount: 6,
-        angle: 120,
-        spread: 55,
-        origin: { x: 1 }
-      });
-      if (Date.now() < end) requestAnimationFrame(frame);
-    })();
-
-    setTimeout(() => {
-      joinWhatsapp();
-      document.body.classList.add("final-bg");
-    }, 3000);
-  });
-
-  // 🎉 Final celebration
-  function celebrate() {
-    const duration = 3 * 1000;
-    const end = Date.now() + duration;
-    (function frame() {
-      confetti({
-        particleCount: 5,
-        angle: 60,
-        spread: 55,
-        origin: { x: 0 }
-      });
-      confetti({
-        particleCount: 5,
-        angle: 120,
-        spread: 55,
-        origin: { x: 1 }
-      });
-      if (Date.now() < end) requestAnimationFrame(frame);
-    })();
-  }
-
-  // WhatsApp link
-  function joinWhatsapp() {
-    window.location.href = 'https://chat.whatsapp.com/L6MUG9fJr0AEciDV0GZbqz';
-  }
+function joinWhatsapp() {
+  window.location.href = 'https://chat.whatsapp.com/L6MUG9fJr0AEciDV0GZbqz';
+}
 </script>
-
-
 </body>
 </html>
