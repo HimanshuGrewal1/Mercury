@@ -66,12 +66,21 @@
   z-index: 1000;            
 }
 
+/* Small screens (phones) */
+@media (max-width: 600px) {
+  #hintBottomRight {
+    bottom: 11vh;
+    right: 4vw;
+    font-size: 0.7rem;
+  }
+}
+
 /* For phones with navigation bars */
-@supports (padding-bottom: env(safe-area-inset-bottom)) {
+/* @supports (padding-bottom: env(safe-area-inset-bottom)) {
   #hintBottomRight {
     bottom: calc(env(safe-area-inset-bottom) + 1.5vh);
   }
-}
+} */
 
 /* Extra tweaks for very small devices */
 @media (max-width: 600px) {
